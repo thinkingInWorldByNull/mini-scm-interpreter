@@ -8,7 +8,7 @@
 
 注意：不含字符串类型
 """
-from typing import Tuple, Callable
+from typing import Tuple, Callable, Generator, Any
 
 TOKEN = str | None
 TOKEN_VALUE = str | None | int | float | bool
@@ -48,19 +48,15 @@ class Tokenizer:
         lambda token: token.lower() if _be_valid_symbol(token) else None,
     ]
 
-    def tokenize(self, line: str):
-        return list(self._gen_token_stream(line))
+    def tokenize(self, line: str) -> list[str]:
+        return list(self._extract_token_stream(line))
 
-    def _gen_token_stream(self, line: str):
-        """解析token，丢弃空白文本和注释"""
-        token, next_token_idx = _next_candidate_token(line, 0)
-
-        while token:
+    def _extract_token_stream(self, line: str):
+        for token, next_token_idx in _mk_candidate_token_stream(line):
             if (res := self._extract_token(token)) is not None:
                 yield res
             else:
                 _raise_token_value_exception(line, token, next_token_idx)
-            token, next_token_idx = _next_candidate_token(line, next_token_idx)
 
     def _extract_token(self, token: TOKEN) -> TOKEN_VALUE:
         for rule in self._TOKEN_TYPE_EXTRACT_RULE:
@@ -86,6 +82,14 @@ def _number_extract(token: str):
             return float(token)
         except ValueError:
             raise Exception(f"Expect number but find {token}")
+
+
+def _mk_candidate_token_stream(line) -> Generator[Tuple[TOKEN, NEXT_TOKEN_INDEX], Any, None]:
+    token, next_token_idx = _next_candidate_token(line, 0)
+
+    while next_token_idx <= len(line) and token:
+        yield token, next_token_idx
+        token, next_token_idx = _next_candidate_token(line, next_token_idx)
 
 
 def _next_candidate_token(line, k) -> Tuple[TOKEN, NEXT_TOKEN_INDEX]:

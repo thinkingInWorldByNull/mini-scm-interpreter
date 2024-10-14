@@ -1,4 +1,4 @@
-from src.syntax_parser.Tokenizer import Tokenizer
+from src.syntax_parser.tokenizer import Tokenizer
 
 _tokenizer = Tokenizer()
 

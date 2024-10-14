@@ -11,3 +11,4 @@ wheels/
 .python-version
 .venv/*
 .idea
+local-run/
