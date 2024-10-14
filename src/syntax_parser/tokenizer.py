@@ -8,34 +8,11 @@
 
 注意：不含字符串类型
 """
-from typing import Tuple, Callable, Generator, Any
+from typing import Tuple, Generator, Any
 
-TOKEN = str | None
-TOKEN_VALUE = str | None | int | float | bool
-NEXT_TOKEN_INDEX = int
-TOKEN_EXTRACT_RULE = Callable[[TOKEN], TOKEN_VALUE]
-
-# 数字
-_NUMERAL_STARTS = set("0123456789") | set(".")
-
-# 合法标识符和操作符
-_OP_SIGN = set("*/<=>+-")
-_SYMBOL_CHARS = (_OP_SIGN |
-                 _NUMERAL_STARTS |
-                 set("!?") |
-                 set("abcdefghijklmnopqrstuvwxyz") |
-                 set("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
-                 )
-
-_WHITESPACE = set(" \t\n\r")
-_SINGLE_CHAR_TOKENS = set("()'")
-
-_TOKEN_END = _WHITESPACE | _SINGLE_CHAR_TOKENS
-_DELIMITERS = _SINGLE_CHAR_TOKENS | {".", ","}
-
-_MAX_TOKEN_LENGTH = 50
-_COMMENT = ";"
-_BOOLEAN_PREFIX = "#"
+from src.syntax_parser.token_syntax_define import TOKEN_EXTRACT_RULE, _DELIMITERS, query_token_next_pos, \
+    max_token_length_warning, be_boolean_prefix, be_single_char_token, be_whit_space_line, be_comment_line, TOKEN, \
+    NEXT_TOKEN_INDEX, TOKEN_VALUE, be_number_token, be_valid_symbol
 
 
 class Tokenizer:
@@ -44,8 +21,8 @@ class Tokenizer:
         lambda token: True if token == "#t" or token == "true" else None,
         lambda token: False if token == "#f" or token == "false" else None,
         lambda token: token if token == "nil" else None,
-        lambda token: _number_extract(token) if _be_number_token(token[0]) else None,
-        lambda token: token.lower() if _be_valid_symbol(token) else None,
+        lambda token: _number_extract(token) if be_number_token(token[0]) else None,
+        lambda token: token.lower() if be_valid_symbol(token) else None,
     ]
 
     def tokenize(self, line: str) -> list[str]:
@@ -96,72 +73,22 @@ def _next_candidate_token(line, k) -> Tuple[TOKEN, NEXT_TOKEN_INDEX]:
     while k < len(line):
         ch = line[k]
 
-        if _be_comment_line(ch):
+        if be_comment_line(ch):
             return None, len(line)
 
-        elif _be_whit_space_line(ch):
+        elif be_whit_space_line(ch):
             k += 1
 
-        elif _be_single_char_token(ch):
+        elif be_single_char_token(ch):
             return ch, k + 1
 
-        elif _be_boolean_prefix(ch):  # 布尔值 #t or #f
+        elif be_boolean_prefix(ch):  # 布尔值 #t or #f
             return line[k:k + 2], min(k + 2, len(line))
 
         else:
-            j = _query_token_next_pos(k, line)
-            _max_token_length_warning(line[k:j], min(j, len(line)) - k)
+            j = query_token_next_pos(k, line)
+            max_token_length_warning(line[k:j], min(j, len(line)) - k)
 
             return line[k:j], min(j, len(line))
 
     return None, len(line)
-
-
-def _be_valid_symbol(text: str) -> bool:
-    if len(text) == 0:
-        return False
-
-    for c in text:
-        if c not in _SYMBOL_CHARS:
-            return False
-
-    return True
-
-
-def _be_comment_line(ch: str) -> bool:
-    return _COMMENT == ch
-
-
-def _be_number_token(ch: str) -> bool:
-    return ch in _NUMERAL_STARTS
-
-
-def _be_whit_space_line(ch: str) -> bool:
-    return ch in _WHITESPACE
-
-
-def _be_single_char_token(ch: str) -> bool:
-    return ch in _SINGLE_CHAR_TOKENS
-
-
-def _be_boolean_prefix(ch: str) -> bool:
-    return _BOOLEAN_PREFIX == ch
-
-
-def _be_not_token_end(ch: str) -> bool:
-    return ch not in _TOKEN_END
-
-
-def _query_token_next_pos(cur_pos, line):
-    token_end_pos = cur_pos
-
-    while token_end_pos < len(line) and _be_not_token_end(line[token_end_pos]):
-        token_end_pos += 1
-
-    return token_end_pos
-
-
-def _max_token_length_warning(token, length):
-    if length > _MAX_TOKEN_LENGTH:
-        import warnings
-        warnings.warn("Token {} has exceeded the maximum token length {}".format(token, _MAX_TOKEN_LENGTH))
