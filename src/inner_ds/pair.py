@@ -1,8 +1,30 @@
 from typing import Any
 
 
+class _Nil:
+    def __init__(self):
+        super().__init__()
+        self.car = ''
+        self.cdr = None
+
+    def __len__(self):
+        return 0
+
+    def map(self, _fn):
+        return self
+
+    def __str__(self):
+        return "()"
+
+    def __repr__(self):
+        return "nil"
+
+
+nil = _Nil()
+
+
 class Pair:
-    def __init__(self, car: Any, cdr: "Pair" = None):
+    def __init__(self, car: Any, cdr: Any = None):
         self.car = car
         self.cdr = cdr
 
@@ -60,27 +82,3 @@ def repl_str(val):
     if isinstance(val, str) and val and val[0] == "\"":
         return "\"" + repr(val[1:-1])[1:-1] + "\""
     return str(val)
-
-
-class _nil:
-    """A empty list"""
-
-    def __init__(self):
-        super().__init__()
-        self.car = ''
-        self.cdr = None
-
-    def __len__(self):
-        return 0
-
-    def map(self, fn):
-        return self
-
-    def __str__(self):
-        return "()"
-
-    def __repr__(self):
-        return "nil"
-
-
-nil = _nil()
