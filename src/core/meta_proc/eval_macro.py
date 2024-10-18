@@ -25,7 +25,7 @@ def _mk_macro_procedure(expr: SyntaxTree, env: Environment):
     parameters: SyntaxTree = expr.remain().first()
     macro_body: SyntaxTree = expr.remain().remain()
 
-    return MacroProcedure(tree=parameters, body=macro_body, env=env)
+    return MacroProcedure(params=parameters, body=macro_body, env=env)
 
 
 def _check_macro_type(macro_name):

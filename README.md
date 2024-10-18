@@ -11,8 +11,8 @@
 - [x] V1: Token和语法树解析
 - [x] V2: 增加 `Eval-Apply` 结构
 - [x] V3: 支持内置函数比如`max`, `min`...
-- [x] V4: 支持动态Lambda
-- [x] V5: 支持Macro
+- [x] V4: 支持Lambda
+- [x] V5: 支持Macro和简单宏展开
 - [ ] V6: 尾递归优化
 - [ ] V7: 惰性求值
 - [ ] V8: 支持非确定性计算

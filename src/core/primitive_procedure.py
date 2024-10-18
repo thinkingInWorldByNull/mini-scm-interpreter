@@ -46,8 +46,8 @@ class PrimitiveProcedure(Procedure):
 
 class LambdaProcedure(Procedure):
 
-    def __init__(self, tree: SyntaxTree, body: SyntaxTree, env: Environment):
-        self._param_names = SyntaxTree.flat(tree)
+    def __init__(self, params: SyntaxTree, body: SyntaxTree, env: Environment):
+        self._param_names = SyntaxTree.flat(params)
         self._body = body
         self._env = env
 

@@ -7,6 +7,7 @@ from src.core.meta_proc.eval_define import DefineMetaProduce
 from src.core.meta_proc.eval_if import IfMetaProduce
 from src.core.meta_proc.eval_lambda import LambdaMetaProduce
 from src.core.meta_proc.eval_macro import MacroMetaProduce
+from src.core.meta_proc.eval_macro_expand import MacroExpandMetaProduce
 from src.core.meta_proc.eval_quote import QuoteMetaProduce
 from src.core.meta_proc.eval_set import SetMetaProduce
 from src.core.meta_proc.meta_proc import MetaProduce
@@ -41,6 +42,7 @@ def get_meta_proc_factory(eval_func_factory: Callable[[], _EVAL_FUNC]) -> MetaPr
     meta_proc_factory.register("define", DefineMetaProduce(eval_fun))
     meta_proc_factory.register("lambda", LambdaMetaProduce(eval_fun))
     meta_proc_factory.register("defmacro", MacroMetaProduce(eval_fun))
+    meta_proc_factory.register("macroexpand", MacroExpandMetaProduce(eval_fun))
     meta_proc_factory.register("quote", QuoteMetaProduce(eval_fun))
 
     meta_proc_factory.register("set", SetMetaProduce(eval_fun))

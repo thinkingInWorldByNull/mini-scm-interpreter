@@ -74,3 +74,13 @@ def test_macro_stream():
 
     ]))
     assert res == ["double_when_cond!", 10, 13]
+
+
+def test_macro_expand():
+    res = list(mk_eval_stream([
+        "(defmacro setx! (x) (list 'set x 3))",
+        "(setx! y)",
+        "y",
+        "(macroexpand setx! y)",
+    ]))
+    assert res == ['setx!', 'y', 3, '(set y 3)']
