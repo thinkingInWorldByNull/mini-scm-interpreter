@@ -30,6 +30,6 @@ jobs:
           rye sync
       - name: Test with pytest
         run: |
-          pytest
+          rye run pytest
       - name: Lint
         run: rye lint
