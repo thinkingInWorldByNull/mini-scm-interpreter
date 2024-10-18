@@ -8,6 +8,7 @@ import operator
 from functools import reduce
 from typing import Callable, Any, Optional
 
+from src.common_ds.pair import nil
 from src.core.environment import Environment
 from src.core.syntax_tree.syntax_tree_define import SyntaxTree
 
@@ -16,7 +17,11 @@ class ProcedureError(Exception):
     pass
 
 
-class PrimitiveProcedure:
+class Procedure:
+    pass
+
+
+class PrimitiveProcedure(Procedure):
     """能够直接处理和识别的语法符号：比如预定义的max, min, abs..."""
 
     def __init__(self, be_need_env: bool, fn: Callable):
@@ -39,7 +44,7 @@ class PrimitiveProcedure:
         return None
 
 
-class LambdaProcedure:
+class LambdaProcedure(Procedure):
 
     def __init__(self, tree: SyntaxTree, body: SyntaxTree, env: Environment):
         self._param_names = SyntaxTree.flat(tree)
@@ -51,6 +56,10 @@ class LambdaProcedure:
 
     def body(self) -> SyntaxTree:
         return self._body
+
+
+class MacroProcedure(LambdaProcedure):
+    pass
 
 
 def be_primitive_procedure(proc: Any) -> bool:
@@ -88,6 +97,11 @@ def _check_nums(*vals):
 
 def _arith(fn, init, vals):
     return reduce(fn, vals, init)
+
+
+@primitive("=")
+def eq(val0, val1):
+    return val0 == val1
 
 
 @primitive("+")
@@ -133,6 +147,21 @@ def _max(*args):
 @primitive("min")
 def _min(*args):
     return min(*args)
+
+
+@primitive("nil?")
+def be_nil(x):
+    return x is nil or x is None
+
+
+@primitive("list")
+def scheme_list(*vals):
+    result = nil
+
+    for e in reversed(vals):
+        result = SyntaxTree(e, result)
+
+    return result
 
 
 def get_primitive_proc() -> dict[str, PrimitiveProcedure]:

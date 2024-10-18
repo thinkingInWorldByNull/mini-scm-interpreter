@@ -23,6 +23,8 @@ def test_let():
 def test_quote():
     assert str(parser.parse(tokenizer.tokenize("(len '(1 2 3 4))"))) == "(len (quote (1 2 3 4)))"
     assert str(parser.parse(tokenizer.tokenize("(list 'a 'b)"))) == "(list (quote a) (quote b))"
+    assert str(parser.parse(tokenizer.tokenize("(quote (+ x 2))"))) == "(quote (+ x 2))"
+    assert str(parser.parse(tokenizer.tokenize("'(+ x 2)"))) == "(quote (+ x 2))"
 
 
 def test_nil():

@@ -13,7 +13,7 @@ _NUMERAL_STARTS = set("0123456789") | set("-.")
 _OP_SIGN = set("*/<=>+-")
 _SYMBOL_CHARS = (_OP_SIGN |
                  _NUMERAL_STARTS |
-                 set("!?") |
+                 set("_!?") |
                  set("abcdefghijklmnopqrstuvwxyz") |
                  set("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
                  )

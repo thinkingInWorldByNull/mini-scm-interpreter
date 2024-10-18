@@ -14,7 +14,7 @@ class SyntaxTree:
 
     @staticmethod
     def be_nil(p):
-        return p == nil
+        return p is None or p == nil
 
     @staticmethod
     def be_syntax_tree(p):
@@ -54,6 +54,16 @@ class SyntaxTree:
     def __repr__(self):
         return "SyntaxTree({0}, {1})".format(repr(self.first()), repr(self.remain()))
 
+    def __len__(self):
+        n, rest = 1, self.remain()
+
+        while isinstance(rest, Pair):
+            n += 1
+            rest = rest.remain()
+
+        if rest is not nil:
+            raise TypeError("length attempted on improper list")
+        return n
 
 def _convert(pair):
     if isinstance(pair, Pair):

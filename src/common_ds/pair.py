@@ -16,6 +16,9 @@ class _Nil:
     def __repr__(self):
         return "nil"
 
+    def map(self, _fn):
+        return self
+
 
 nil = _Nil()
 

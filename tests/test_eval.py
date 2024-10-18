@@ -48,3 +48,29 @@ def test_eval_stream():
     ]))
 
     assert res == ["square", 9]
+
+
+def test_set_stream():
+    res = list(mk_eval_stream([
+        "(set x 3)",
+        "x"
+    ]))
+
+    assert res == ["x", 3]
+
+
+def test_macro_stream():
+    res = list(mk_eval_stream([
+        "(defmacro set_var_3! (x) (list 'set x 3))",
+        "(set_var_3! y)",
+        "y"
+    ]))
+    assert res == ["set_var_3!", "y", 3]
+
+    res = list(mk_eval_stream([
+        "(defmacro double_when_cond! (x) (list 'if (= x 5) 10 (+ x 1)))",
+        "(double_when_cond! 5)",
+        "(double_when_cond! 12)",
+
+    ]))
+    assert res == ["double_when_cond!", 10, 13]

@@ -1,12 +1,12 @@
 from typing import Any
 
+from src.common_ds.pair import nil
 from src.core.environment import Environment
 from src.core.meta_proc.meta_proc_factory import get_meta_proc_factory
-from src.core.primitive_procedure import be_primitive_procedure, be_lambda_procedure, LambdaProcedure
+from src.core.primitive_procedure import be_primitive_procedure, be_lambda_procedure, LambdaProcedure, MacroProcedure
 from src.core.syntax_tree.syntax_tree_define import SyntaxTree
 from src.core.syntax_tree.syntax_tree_recognize import be_self_evaluation, be_symbol, assert_syntax_tree, \
     be_syntax_tree, be_nil
-from src.common_ds.pair import nil
 
 
 def k_eval(expr: SyntaxTree | Any, env: Environment) -> Any:
@@ -26,6 +26,9 @@ def k_eval(expr: SyntaxTree | Any, env: Environment) -> Any:
 
     # application 过程处理:定义的方法、操作符等
     operator = k_eval(first, env)
+    if isinstance(operator, MacroProcedure):
+        return k_eval(k_apply(operator, SyntaxTree.flat(rest), env), env)
+
     operands: SyntaxTree = rest.map(lambda x: k_eval(x, env))
     return k_apply(operator, SyntaxTree.flat(operands), env)
 
@@ -54,7 +57,7 @@ def eval_sequence(expr: SyntaxTree, env: Environment) -> Any:
 
 
 def _cast_lambda_procedure(procedure) -> LambdaProcedure:
-    assert be_lambda_procedure(procedure), f"Expect LambdaProcedure but found {procedure} type is {type(procedure)}"
+    assert be_lambda_procedure(procedure), f"Expect Procedure but found {procedure} type is {type(procedure)}"
     return procedure
 
 
