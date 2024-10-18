@@ -27,6 +27,8 @@ jobs:
           cache-prefix: 'optional-prefix'
       - name: Install dependencies
         run: |
+          rye pin 3.11
+          rye fetch
           rye sync
       - name: Test with pytest
         run: |
