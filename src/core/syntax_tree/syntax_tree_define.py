@@ -34,15 +34,10 @@ class SyntaxTree:
         return self._remain
 
     def map(self, fn):
-        root = SyntaxTree(fn(self.first()), self.remain())
+        if self.be_nil(self.remain()):
+            return SyntaxTree(fn(self.first()), nil)
 
-        temp_res: SyntaxTree = root
-
-        while temp_res._be_has_next():
-            temp_res.cdr = SyntaxTree(fn(temp_res.remain().first()), None)
-            temp_res = temp_res.cdr
-
-        return root
+        return SyntaxTree(fn(self.first()), self.remain().map(fn))
 
     def _be_has_next(self):
         return self._remain is not None and not self.be_nil(self._remain)
