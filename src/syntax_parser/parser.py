@@ -1,4 +1,4 @@
-from src.inner_ds.pair import Pair, nil
+from src.common_ds.pair import Pair, nil
 from src.syntax_parser.parser_syntax_define import be_valid_token, be_nil, be_start, be_quote, be_end
 
 

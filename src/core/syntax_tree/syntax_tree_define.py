@@ -1,6 +1,6 @@
 from typing import Any
 
-from src.inner_ds.pair import Pair, repl_str, nil
+from src.common_ds.pair import Pair, repl_str, nil
 
 
 class SyntaxTree:

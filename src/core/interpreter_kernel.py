@@ -6,7 +6,7 @@ from src.core.primitive_procedure import be_primitive_procedure, be_lambda_proce
 from src.core.syntax_tree.syntax_tree_define import SyntaxTree
 from src.core.syntax_tree.syntax_tree_recognize import be_self_evaluation, be_symbol, assert_syntax_tree, \
     be_syntax_tree, be_nil
-from src.inner_ds.pair import nil
+from src.common_ds.pair import nil
 
 
 def k_eval(expr: SyntaxTree | Any, env: Environment) -> Any:

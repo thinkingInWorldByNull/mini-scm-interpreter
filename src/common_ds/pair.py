@@ -10,9 +10,6 @@ class _Nil:
     def __len__(self):
         return 0
 
-    def map(self, _fn):
-        return self
-
     def __str__(self):
         return "()"
 
@@ -45,18 +42,6 @@ class Pair:
 
     def _be_has_next(self):
         return self.cdr is not None
-
-    def map(self, fn):
-        """Returns a Scheme list after mapping Python function `fn` to `self`.
-        """
-        root = Pair(fn(self.car), self.cdr)
-
-        temp_res = root
-        while temp_res._be_has_next():
-            temp_res.cdr = Pair(fn(temp_res.cdr.car), None)
-            temp_res = temp_res.cdr
-
-        return root
 
     def __str__(self):
         s = "(" + repl_str(self.car)

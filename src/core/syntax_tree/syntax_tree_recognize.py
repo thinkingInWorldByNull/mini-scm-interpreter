@@ -1,7 +1,7 @@
 import numbers
 
 from src.core.syntax_tree.syntax_tree_define import SyntaxTree
-from src.inner_ds.pair import nil
+from src.common_ds.pair import nil
 
 EXPRESSION = SyntaxTree | str
 
