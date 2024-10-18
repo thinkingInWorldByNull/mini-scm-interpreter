@@ -22,7 +22,7 @@ jobs:
       - name: Install the latest version of rye
         uses: eifinger/setup-rye@v4
         with:
-          version: '0.12.0'
+          version: '0.39.0'
           enable-cache: true
           cache-prefix: 'optional-prefix'
       - name: Install dependencies
