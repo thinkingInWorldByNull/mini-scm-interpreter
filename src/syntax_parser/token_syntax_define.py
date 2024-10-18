@@ -1,3 +1,4 @@
+import re
 from typing import Callable
 
 TOKEN = str | None
@@ -6,7 +7,7 @@ NEXT_TOKEN_INDEX = int
 TOKEN_EXTRACT_RULE = Callable[[TOKEN], TOKEN_VALUE]
 
 # 数字
-_NUMERAL_STARTS = set("0123456789") | set(".")
+_NUMERAL_STARTS = set("0123456789") | set("-.")
 
 # 合法标识符和操作符
 _OP_SIGN = set("*/<=>+-")
@@ -43,8 +44,13 @@ def be_comment_line(ch: str) -> bool:
     return _COMMENT == ch
 
 
-def be_number_token(ch: str) -> bool:
-    return ch in _NUMERAL_STARTS
+_NUMBER_MATCH = re.compile(r"^-?[0-9]+(\.[0-9]+)?$")
+
+
+def be_number_token(ch: list[str]) -> bool:
+    if not ch:
+        return False
+    return _NUMBER_MATCH.match("".join(ch)) is not None
 
 
 def be_whit_space_line(ch: str) -> bool:

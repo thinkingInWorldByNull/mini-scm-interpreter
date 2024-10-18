@@ -6,68 +6,75 @@
 import numbers
 import operator
 from functools import reduce
-from typing import Callable, Any
+from typing import Callable, Any, Optional
 
 from src.core.environment import Environment
-from src.core.syntax_tree_define import SyntaxTree
-from src.inner_ds.pair import Pair
-
-PRIMITIVE_PROCS: dict[str, tuple[Callable[[list[Any]], Any], bool]] = {}
+from src.core.syntax_tree.syntax_tree_define import SyntaxTree
 
 
 class ProcedureError(Exception):
     pass
 
 
-class Procedure:
-    def apply(self, args: list[Any], env: Environment):
-        pass
-
-
 class PrimitiveProcedure:
-    pass
+    """能够直接处理和识别的语法符号：比如预定义的max, min, abs..."""
+
+    def __init__(self, be_need_env: bool, fn: Callable):
+        self.be_need_env = be_need_env
+        self.fn = fn
+
+    def apply(self, args, env: Environment):
+        if (args_handle := self.args_handle()) is not None:
+            args = args_handle(args)
+
+            if self.be_need_env:
+                return self.fn(args, env)
+            return self.fn(args)
+
+        if self.be_need_env:
+            return self.fn(*args, env)
+        return self.fn(*args)
+
+    def args_handle(self) -> Optional[Callable]:
+        return None
 
 
-class LambdaProcedure(Procedure):
+class LambdaProcedure:
 
-    def __init__(self, parameters: SyntaxTree, body: SyntaxTree, env: Environment):
-        super().__init__()
-        self._parameters = parameters
+    def __init__(self, tree: SyntaxTree, body: SyntaxTree, env: Environment):
+        self._param_names = SyntaxTree.flat(tree)
         self._body = body
         self._env = env
 
-    def mk_new_env(self, args: list[Any], env: Environment):
-        pass
+    def mk_new_env(self, args: list[Any], _env: Environment):
+        return self._env.extend_environment(self._param_names, args)
 
     def body(self) -> SyntaxTree:
-        pass
+        return self._body
 
 
-def be_primitive_procedure(proc: Procedure) -> bool:
+def be_primitive_procedure(proc: Any) -> bool:
     return isinstance(proc, PrimitiveProcedure)
 
 
-def be_lambda_procedure(proc: Procedure) -> bool:
+def be_lambda_procedure(proc: Any) -> bool:
     return isinstance(proc, LambdaProcedure)
 
 
-def primitive(name: str, use_env=False):
+_PRIMITIVE_PROCS: dict[str, PrimitiveProcedure] = {}
+
+
+def primitive(name: str, be_need_env: bool = False):
     def register_primitive_proces(fn):
-        if name in PRIMITIVE_PROCS:
+        if name in _PRIMITIVE_PROCS:
             raise ValueError(f"Occur conflict that {name} already exist, please consider change the fn name")
 
-        PRIMITIVE_PROCS[name] = (fn, use_env)
+        _PRIMITIVE_PROCS[name] = PrimitiveProcedure(be_need_env, fn)
         return fn
 
     return register_primitive_proces
 
 
-@primitive("pair?")
-def be_scheme_pair(x: Any):
-    return isinstance(x, Pair)
-
-
-@primitive("number?")
 def be_number(x):
     return isinstance(x, numbers.Number)
 
@@ -116,3 +123,17 @@ def div(val0, *vals):
 @primitive("abs")
 def _abs(val0):
     return abs(val0)
+
+
+@primitive("max")
+def _max(*args):
+    return max(*args)
+
+
+@primitive("min")
+def _min(*args):
+    return min(*args)
+
+
+def get_primitive_proc() -> dict[str, PrimitiveProcedure]:
+    return dict(**_PRIMITIVE_PROCS)

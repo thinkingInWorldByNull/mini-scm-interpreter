@@ -10,6 +10,7 @@ def test_boolean():
 
 
 def test_number():
+    assert _tokenizer.tokenize("-5") == [-5]
     assert _tokenizer.tokenize("(+ 1 2)") == ['(', '+', 1, 2, ')']
     assert _tokenizer.tokenize("(+ 1 2 (- 5 3 2))") == ['(', '+', 1, 2, '(', '-', 5, 3, 2, ')', ')']
 
@@ -18,7 +19,7 @@ def test_define():
     assert _tokenizer.tokenize("(define (abs x) (if (< x 0) (- x) x))") == ['(', 'define', '(', 'abs', 'x', ')', '(',
                                                                             'if', '(', '<', 'x', 0, ')', '(', '-', 'x',
                                                                             ')', 'x', ')', ')']
-    assert _tokenizer.tokenize("(abs -2)") == ['(', 'abs', '-2', ')']
+    assert _tokenizer.tokenize("(abs -2)") == ['(', 'abs', -2, ')']
     assert (_tokenizer.tokenize("""
     (define (map proc items)
     (if (null? items)

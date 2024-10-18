@@ -1,6 +1,6 @@
 from typing import Any
 
-from src.inner_ds.pair import Pair, nil, repl_str
+from src.inner_ds.pair import Pair, repl_str, nil
 
 
 class SyntaxTree:
@@ -11,6 +11,21 @@ class SyntaxTree:
     @classmethod
     def from_pair_parser(cls, pair: Pair):
         return _convert(pair)
+
+    @staticmethod
+    def be_nil(p):
+        return p == nil
+
+    @staticmethod
+    def be_syntax_tree(p):
+        return isinstance(p, SyntaxTree)
+
+    @staticmethod
+    def flat(tree: "SyntaxTree") -> list[str]:
+        if SyntaxTree.be_nil(tree) or not SyntaxTree.be_syntax_tree(tree):
+            return []
+
+        return [tree.first()] + SyntaxTree.flat(tree.remain())
 
     def first(self):
         return self._first
@@ -30,7 +45,7 @@ class SyntaxTree:
         return root
 
     def _be_has_next(self):
-        return self._remain is not None
+        return self._remain is not None and not self.be_nil(self._remain)
 
     def __str__(self):
         s = "(" + repl_str(self._first)

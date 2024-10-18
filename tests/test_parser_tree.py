@@ -1,4 +1,4 @@
-from src.core.syntax_tree_define import SyntaxTree
+from src.core.syntax_tree.syntax_tree_define import SyntaxTree
 from src.syntax_parser.parser import Parser
 from src.syntax_parser.tokenizer import Tokenizer
 

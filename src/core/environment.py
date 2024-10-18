@@ -1,6 +1,8 @@
 from typing import Any
 
-from src.core.primitive_procedure import ProcedureError
+
+class EnvironmentException(Exception):
+    pass
 
 
 class _Frame:
@@ -29,12 +31,20 @@ class Environment:
 
         self._frames: list[_Frame] = [_Frame.mk_empty_frame()]
 
+    @staticmethod
+    def init_from_dict(init_kvs: dict[str, Any]):
+        new_env = Environment()
+
+        new_env._frames = [_Frame(init_kvs)]
+
+        return new_env
+
     def lookup_variable_value(self, var_name: str) -> Any:
         for fm in self._frames:
             if fm.be_exist(var_name):
                 return fm.get_val(var_name)
 
-        raise ProcedureError(f"Unbound variable: {var_name}")
+        raise EnvironmentException(f"Unbound variable: {var_name}")
 
     def extend_environment(self, var_names: list[str], var_vals: list[Any]):
         new_env = Environment()
@@ -45,7 +55,7 @@ class Environment:
 
     def define_variable(self, var_name: str, var_val: Any):
         if self.first_frame().be_exist(var_name):
-            raise ProcedureError(f"{var_name} duplicate define")
+            raise EnvironmentException(f"{var_name} duplicate define")
 
         self.set_variable(var_name, var_val)
 

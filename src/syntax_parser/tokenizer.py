@@ -21,7 +21,7 @@ class Tokenizer:
         lambda token: True if token == "#t" or token == "true" else None,
         lambda token: False if token == "#f" or token == "false" else None,
         lambda token: token if token == "nil" else None,
-        lambda token: _number_extract(token) if be_number_token(token[0]) else None,
+        lambda token: _number_extract(token) if be_number_token(token) else None,
         lambda token: token.lower() if be_valid_symbol(token) else None,
     ]
 
@@ -44,7 +44,7 @@ class Tokenizer:
 
 def _raise_token_value_exception(line: str, token: str, next_token_idx: int):
     error_message = [
-        "warning: invalid token: {0}".format(token),
+        "error: invalid token: {0}".format(token),
         " " * 4 + line,
         " " * (next_token_idx + 4) + "^"
     ]

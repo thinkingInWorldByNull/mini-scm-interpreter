@@ -1,6 +1,6 @@
 import numbers
 
-from src.core.syntax_tree_define import SyntaxTree
+from src.core.syntax_tree.syntax_tree_define import SyntaxTree
 from src.inner_ds.pair import nil
 
 EXPRESSION = SyntaxTree | str
@@ -18,12 +18,16 @@ def be_self_evaluation(expr) -> bool:
     return (be_bool(expr)
             or be_number(expr)
             or be_nil(expr)
-            or be_symbol(expr)
+            or be_quota_txt(expr)
             or expr is None)
 
 
 def be_nil(expr):
     return expr == nil
+
+
+def be_quota_txt(expr):
+    return isinstance(expr, str) and expr.startswith("\"")
 
 
 def be_symbol(expr: EXPRESSION) -> bool:
