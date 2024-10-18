@@ -1,5 +1,5 @@
 from src.core.environment import Environment
-from src.core.eval_sys import mk_eval_with_empty_env, mk_eval_with_env, mk_eval_with_extend
+from src.core.eval_sys import mk_eval_with_empty_env, mk_eval_with_env, mk_eval_with_extend, mk_eval_stream
 from src.core.primitive_procedure import PrimitiveProcedure
 from src.syntax_parser.parser import Parser
 from src.syntax_parser.tokenizer import Tokenizer
@@ -39,3 +39,12 @@ class AddPrimitiveProcedure(PrimitiveProcedure):
 
     def args_handle(self):
         return lambda args: iter(args)
+
+
+def test_eval_stream():
+    res = list(mk_eval_stream([
+        "(define (square x) (* x x))",
+        "(square 3)"
+    ]))
+
+    assert res == ["square", 9]

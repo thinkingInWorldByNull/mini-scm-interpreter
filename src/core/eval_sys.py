@@ -34,6 +34,15 @@ def _merge_env(be_allow_override_built_in: bool, extend_primitive: dict[str, Pri
     return Environment.init_from_dict(built_in_proc | extend_primitive)
 
 
+def mk_eval_stream(express: list[str],
+                   extend_primitive: dict[str, PrimitiveProcedure] = None,
+                   be_allow_override_built_in: bool = False):
+    env = _merge_env(be_allow_override_built_in, extend_primitive)
+
+    for expr in express:
+        yield mk_eval_with_env(expr, env)
+
+
 def _check_overwrite(be_allow_override_built_in: bool,
                      built_in_proc: dict[str, PrimitiveProcedure],
                      extend_primitive: dict[str, PrimitiveProcedure]):

@@ -10,9 +10,6 @@ from src.core.syntax_tree.syntax_tree_recognize import be_symbol, assert_syntax_
 class DefineMetaProduce(MetaProduce):
 
     def apply(self, expr: SyntaxTree | Any, env: Environment):
-        pass
-
-    def eval_define(self, expr: SyntaxTree | Any, env: Environment):
         name: str = eval_define_name(expr)
         val: SyntaxTree = eval_define_val(expr)
 
