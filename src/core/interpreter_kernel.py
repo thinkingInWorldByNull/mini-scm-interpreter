@@ -3,7 +3,8 @@ from typing import Any
 from src.common_ds.pair import nil
 from src.core.environment import Environment
 from src.core.meta_proc.meta_proc_factory import get_meta_proc_factory
-from src.core.primitive_procedure import be_primitive_procedure, be_lambda_procedure, LambdaProcedure, MacroProcedure
+from src.core.primitive_procedure import be_primitive_procedure, be_lambda_procedure, LambdaProcedure, MacroProcedure, \
+    PrimitiveProcedure
 from src.core.syntax_tree.syntax_tree_define import SyntaxTree
 from src.core.syntax_tree.syntax_tree_recognize import be_self_evaluation, be_symbol, assert_syntax_tree, \
     be_syntax_tree, be_nil
@@ -21,7 +22,7 @@ def k_eval(expr: SyntaxTree | Any, env: Environment) -> Any:
     first, rest = expr.first(), expr.remain()
 
     # 元语言符号处理过程 define, if, lambda
-    if be_symbol(first) and _meta_factory.be_exist(first):
+    if be_meta_process(first):
         return _meta_factory.lookup(first).apply(rest, env)
 
     # application 过程处理:定义的方法、操作符等
@@ -33,16 +34,24 @@ def k_eval(expr: SyntaxTree | Any, env: Environment) -> Any:
     return k_apply(operator, SyntaxTree.flat(operands), env)
 
 
-def k_apply(procedure, args: list[Any], env: Environment) -> Any:
+def be_meta_process(first):
+    return be_symbol(first) and _meta_factory.be_exist(first)
+
+
+def k_apply(procedure: LambdaProcedure | PrimitiveProcedure, args: list[Any], env: Environment) -> Any:
     # 对于已经预定义的py func可以直接调用
     if be_primitive_procedure(procedure):
         return procedure.apply(args, env)
 
     # lambda表达式 不能直接调用，必须要结合env和syntax tree重新eval参数并设置到环境中
-    lambda_procedure: LambdaProcedure = _cast_lambda_procedure(procedure)
-    new_env: Environment = lambda_procedure.mk_new_env(args, env)
+    return apply_lambda(_cast_lambda_procedure(procedure), args, env)
 
-    return eval_sequence(lambda_procedure.body(), new_env)
+
+def apply_lambda(procedure: LambdaProcedure, args: list[Any], env: Environment):
+    new_env: Environment = procedure.mk_new_env(args, env)
+    lambda_body = procedure.body()
+
+    return eval_sequence(lambda_body, new_env)
 
 
 def eval_sequence(expr: SyntaxTree, env: Environment) -> Any:
@@ -52,6 +61,7 @@ def eval_sequence(expr: SyntaxTree, env: Environment) -> Any:
     if expr.remain() == nil:
         return k_eval(expr.first(), env)
 
+    # begin (...) (...)
     k_eval(expr.first(), env)
     return eval_sequence(expr.remain(), env)
 

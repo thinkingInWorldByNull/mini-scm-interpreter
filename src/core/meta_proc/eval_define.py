@@ -10,15 +10,20 @@ from src.core.syntax_tree.syntax_tree_recognize import be_symbol, assert_syntax_
 class DefineMetaProduce(MetaProduce):
 
     def apply(self, expr: SyntaxTree | Any, env: Environment):
-        name: str = eval_define_name(expr)
-        val: SyntaxTree = eval_define_val(expr)
+        var_name: str = _get_variable_name(expr)
+        var_val = self._eval_value(env, expr)
 
-        env.define_variable(name, self.eval(val, env))
+        env.define_variable(var_name, var_val)
 
-        return name
+        return var_name
+
+    def _eval_value(self, env, expr):
+        expr_body = _get_variable_body(expr)
+        
+        return self.eval(expr_body, env)
 
 
-def eval_define_name(tree: SyntaxTree) -> str:
+def _get_variable_name(tree: SyntaxTree) -> str:
     target: SyntaxTree | str = tree.first()
 
     if be_symbol(target):
@@ -32,7 +37,7 @@ def eval_define_name(tree: SyntaxTree) -> str:
     raise ProcedureError("Non symbol find")
 
 
-def eval_define_val(tree: SyntaxTree) -> SyntaxTree:
+def _get_variable_body(tree: SyntaxTree) -> SyntaxTree:
     target: SyntaxTree | str = tree.first()
 
     # (define size 2)

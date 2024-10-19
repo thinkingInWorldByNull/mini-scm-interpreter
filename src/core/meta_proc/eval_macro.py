@@ -4,7 +4,6 @@ from src.core.environment import Environment
 from src.core.meta_proc.meta_proc import MetaProduce
 from src.core.primitive_procedure import MacroProcedure
 from src.core.syntax_tree.syntax_tree_define import SyntaxTree
-from src.core.syntax_tree.syntax_tree_recognize import be_symbol
 
 
 class MacroMetaProduce(MetaProduce):
@@ -17,16 +16,8 @@ class MacroMetaProduce(MetaProduce):
         return func_name
 
 
-def _get_macro_name(expr: SyntaxTree):
-    return expr.first()
-
-
 def _mk_macro_procedure(expr: SyntaxTree, env: Environment):
     parameters: SyntaxTree = expr.remain().first()
     macro_body: SyntaxTree = expr.remain().remain()
 
     return MacroProcedure(params=parameters, body=macro_body, env=env)
-
-
-def _check_macro_type(macro_name):
-    assert be_symbol(macro_name), f"expect str for macro name but found other type {type(macro_name)}"
