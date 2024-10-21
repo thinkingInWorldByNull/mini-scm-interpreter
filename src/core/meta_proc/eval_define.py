@@ -8,6 +8,12 @@ from src.core.syntax_tree.syntax_tree_recognize import be_symbol, assert_syntax_
 
 
 class DefineMetaProduce(MetaProduce):
+    """
+    define的作用就是把表达式的值绑定到一个变量比如 (define size (+ 12 3))
+    - 解析变量名
+    - 对表达式求值
+    - 将变量名和值绑定到环境中
+    """
 
     def apply(self, expr: SyntaxTree | Any, env: Environment):
         var_name: str = _get_variable_name(expr)
