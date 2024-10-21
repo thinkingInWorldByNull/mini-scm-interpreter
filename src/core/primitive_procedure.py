@@ -166,7 +166,7 @@ def scheme_list(*vals):
 
 
 @primitive("force")
-def scheme_list(val):
+def force_eval(val):
     if not isinstance(val, Promise):
         raise ProcedureError(f"Expect Promise but found {type(val)}")
 
