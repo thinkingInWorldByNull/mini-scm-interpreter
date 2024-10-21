@@ -2,7 +2,7 @@ from typing import Any, Callable
 
 from src.common_ds.pair import nil
 from src.core.environment import Environment
-from src.core.meta_analyse.analyse_factory import get_analyse_factory
+from src.core.analyse.analyse_factory import get_analyse_factory
 from src.core.primitive_procedure import be_primitive_procedure, be_lambda_procedure, LambdaProcedure, MacroProcedure, \
     PrimitiveProcedure, ProcedureError
 from src.core.syntax.syntax_tree_define import SyntaxTree

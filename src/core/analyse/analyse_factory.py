@@ -3,15 +3,15 @@
 from typing import Any, Callable
 
 from src.core.environment import Environment
-from src.core.meta_analyse.analyse_define import AnalyseDefineProduce
-from src.core.meta_analyse.analyse_delay import AnalyseDelayProduce
-from src.core.meta_analyse.analyse_if import AnalyseIfProduce
-from src.core.meta_analyse.analyse_lambda import AnalyseLambdaProduce
-from src.core.meta_analyse.analyse_macro import AnalyseMacroProduce
-from src.core.meta_analyse.analyse_macro_expand import AnalyseMacroExpandProduce
-from src.core.meta_analyse.analyse_proc import AnalyseProduce
-from src.core.meta_analyse.analyse_quote import AnalyseQuoteProduce
-from src.core.meta_analyse.analyse_set import AnalyseSetProduce
+from src.core.analyse.analyse_define import AnalyseDefineProduce
+from src.core.analyse.analyse_delay import AnalyseDelayProduce
+from src.core.analyse.analyse_if import AnalyseIfProduce
+from src.core.analyse.analyse_lambda import AnalyseLambdaProduce
+from src.core.analyse.analyse_macro import AnalyseMacroProduce
+from src.core.analyse.analyse_macro_expand import AnalyseMacroExpandProduce
+from src.core.analyse.analyse_proc import AnalyseProduce
+from src.core.analyse.analyse_quote import AnalyseQuoteProduce
+from src.core.analyse.analyse_set import AnalyseSetProduce
 from src.core.primitive_procedure import ProcedureError
 from src.core.syntax.syntax_tree_define import SyntaxTree
 

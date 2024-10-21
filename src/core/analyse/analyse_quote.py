@@ -1,7 +1,7 @@
 from typing import Any, Callable
 
 from src.core.environment import Environment
-from src.core.meta_analyse.analyse_proc import AnalyseProduce
+from src.core.analyse.analyse_proc import AnalyseProduce
 from src.core.syntax.syntax_tree_define import SyntaxTree
 
 
