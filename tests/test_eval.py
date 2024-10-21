@@ -84,3 +84,12 @@ def test_macro_expand():
         "(macroexpand setx! y)",
     ]))
     assert res == ['setx!', 'y', 3, '(set y 3)']
+
+
+def test_delay():
+    res = list(mk_eval_stream([
+        "(define x (delay (+ 1 2 (max -3 6 9))))",
+        "(force x)",
+    ]))
+
+    assert res == ['x', 12]

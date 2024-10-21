@@ -3,8 +3,8 @@ from typing import Any
 from src.core.environment import Environment
 from src.core.meta_proc.meta_proc import MetaProduce
 from src.core.primitive_procedure import ProcedureError
-from src.core.syntax_tree.syntax_tree_define import SyntaxTree
-from src.core.syntax_tree.syntax_tree_recognize import be_symbol, assert_syntax_tree
+from src.core.syntax.syntax_tree_define import SyntaxTree
+from src.core.syntax.syntax_tree_recognize import be_symbol, assert_syntax_tree
 
 
 class DefineMetaProduce(MetaProduce):

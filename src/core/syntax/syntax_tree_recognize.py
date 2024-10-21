@@ -1,6 +1,6 @@
 import numbers
 
-from src.core.syntax_tree.syntax_tree_define import SyntaxTree
+from src.core.syntax.syntax_tree_define import SyntaxTree
 from src.common_ds.pair import nil
 
 EXPRESSION = SyntaxTree | str

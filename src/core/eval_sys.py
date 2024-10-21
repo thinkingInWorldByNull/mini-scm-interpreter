@@ -1,7 +1,7 @@
 from src.core.environment import Environment
 from src.core.interpreter_kernel import k_eval
 from src.core.primitive_procedure import PrimitiveProcedure, get_primitive_proc
-from src.core.syntax_tree.syntax_tree_define import SyntaxTree
+from src.core.syntax.syntax_tree_define import SyntaxTree
 from src.syntax_parser.parser import Parser
 from src.syntax_parser.tokenizer import Tokenizer
 

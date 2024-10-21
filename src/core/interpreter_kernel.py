@@ -5,8 +5,8 @@ from src.core.environment import Environment
 from src.core.meta_proc.meta_proc_factory import get_meta_proc_factory
 from src.core.primitive_procedure import be_primitive_procedure, be_lambda_procedure, LambdaProcedure, MacroProcedure, \
     PrimitiveProcedure, ProcedureError
-from src.core.syntax_tree.syntax_tree_define import SyntaxTree
-from src.core.syntax_tree.syntax_tree_recognize import be_self_evaluation, be_symbol, assert_syntax_tree, \
+from src.core.syntax.syntax_tree_define import SyntaxTree
+from src.core.syntax.syntax_tree_recognize import be_self_evaluation, be_symbol, assert_syntax_tree, \
     be_syntax_tree, be_nil
 
 

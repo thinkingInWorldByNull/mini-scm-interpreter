@@ -10,7 +10,8 @@ from typing import Callable, Any, Optional
 
 from src.common_ds.pair import nil
 from src.core.environment import Environment
-from src.core.syntax_tree.syntax_tree_define import SyntaxTree
+from src.core.syntax.promise import Promise
+from src.core.syntax.syntax_tree_define import SyntaxTree
 
 
 class ProcedureError(Exception):
@@ -162,6 +163,19 @@ def scheme_list(*vals):
         result = SyntaxTree(e, result)
 
     return result
+
+
+@primitive("force")
+def scheme_list(val):
+    if not isinstance(val, Promise):
+        raise ProcedureError(f"Expect Promise but found {type(val)}")
+
+    if val.be_done():
+        return val.val()
+
+    from src.core.interpreter_kernel import k_eval
+    val.done(k_eval(val.expr, val.env))
+    return val.val()
 
 
 def get_primitive_proc() -> dict[str, PrimitiveProcedure]:

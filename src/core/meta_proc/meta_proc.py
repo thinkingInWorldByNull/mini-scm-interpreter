@@ -2,7 +2,7 @@ from abc import abstractmethod
 from typing import Callable, Any
 
 from src.core.environment import Environment
-from src.core.syntax_tree.syntax_tree_define import SyntaxTree
+from src.core.syntax.syntax_tree_define import SyntaxTree
 
 _EVAL_FUNC = Callable[[SyntaxTree | Any, Environment], Any]
 
