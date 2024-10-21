@@ -93,3 +93,12 @@ def test_delay():
     ]))
 
     assert res == ['x', 12]
+
+
+def test_recursive():
+    res = list(mk_eval_stream([
+        "(define (fac n) (if (= n 1) 1 (* (fac(- n 1)) n)))",
+        "(fac 3)",
+        "(fac 1)"
+    ]))
+    assert res == ['fac', 6, 1]
